@@ -1,0 +1,86 @@
+Practical 2
+Extra Exercise
+
+Q1
+
+#include<iostream>
+#include<iomanip>
+#include<cmath>
+using namespace std;
+int main()
+{
+	double loan, monPay, intRate, monIntRate, pay, totalPay, totalInt;
+
+	cout << " \nLoan Amount : $";
+	cin >> loan;
+	cout << endl;
+
+	cout << "Annual interest rate (in the format .12 (for 12%): ";
+	cin >> intRate;
+	cout << endl;
+
+	cout << "Number of monthly payment: ";
+	cin >> pay;
+	cout << endl << endl;
+
+	cout << " -- Report --" << endl << endl;
+
+	monIntRate = intRate / 12;
+	monPay = (monIntRate*(pow((1 + monIntRate), pay) / (pow((1 + monIntRate), pay) - 1) * loan));
+	totalPay = monPay*pay;
+	totalInt = totalPay - loan;
+
+	cout << fixed << setprecision(2);
+	cout << "Loan Amount:                       $" << setw(9) << loan << endl;
+	cout << "Monthly interest Rate:             " << setw(9) << monIntRate * 100 << "%" << endl;
+	cout << "Number of Payments:                 " << setw(9) << pay << endl;
+	cout << "Monthly Payment:                   $" << setw(9) << monPay << endl;
+	cout << "Total Payment:                     $" << setw(9) << totalPay << endl;
+	cout << "Total Interest:                    $" << setw(9) << totalInt << endl;
+
+
+
+	system("pause");
+	return 0;
+
+}
+
+Q2
+easy ba
+
+Q3
+
+#include<iostream>
+#include<iomanip>
+#include<cmath>
+using namespace std;
+int main()
+{
+	int i;
+	double amount, value, intRate;
+
+	cout << "The amount invested: ";
+	cin >> amount;
+	cout << endl;
+
+	cout << "Annual interest rate (%): ";
+	cin >> intRate;
+	cout << endl;
+
+	
+
+	cout << "Years\tFuture value\n";
+
+	
+	for (i = 1; i <= 5; i++)
+	{
+		value = amount * (1 + intRate / 100);
+		amount = value;
+
+		cout << i << "\t" << fixed << setprecision(2) << amount << endl;
+	}
+
+	system("pause");
+	return 0;
+
+}

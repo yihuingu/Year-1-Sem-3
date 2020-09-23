@@ -1,0 +1,82 @@
+Exercise 2
+
+//	int a,b,c;
+//	a=5;
+//	b=10;
+//	c=11;
+//	int d=15;
+//
+//	cout << "a = " << a << " b = " << b << " c = " << c << " d = " << d;
+//	cout << endl << endl;
+//	system ("pause"); 
+//	return 0;
+//
+//	double a='a';
+//	double b=11.5;
+//
+//	cout << "a = "<< a << " b = " << b;
+
+
+//double num1, num2, division, total, result;
+
+//cout << "\n Please enter num1:" ;
+//cin >> num1;
+
+//cout << "\n Please enter num2:";
+//cin >> num2;
+//cout << endl;
+
+//division = num1 / num2;
+//total = num1 + num2;
+//result = division + total * (division - num1) + total * (division - num2);
+
+//cout << " division = " << division << endl;
+//cout << "\n total = " << total << endl;
+//cout << "\n result = " << result << endl << endl;
+
+//int num1, num2;
+//
+//	cout << "Enter 2 integers : ";
+//	cin >> num1 >> num2;
+//
+//	cout << num1 << " + " << num2 << " = " << num1 + num2 << endl;
+//	cout << num1 << " - " << num2 << " = " << num1 - num2 << endl;
+//	cout << num1 << " * " << num2 << " = " << num1 * num2 << endl;
+//	cout << num1 << " / " << num2 << " = " << setprecision (2) << (double)num1 / num2 << endl;
+
+#include<iostream>
+#include <iomanip>
+using namespace std;
+int main()
+{
+	/*int hrs, min, sec;
+
+	cout << "Enter time in seconds : ";
+	cin >> sec;
+
+	hrs = sec / 3600;
+	min = (sec % 3600) / 60;
+	sec = (sec % 3600) % 60;
+
+	cout << "The elapse time is " << hrs << ":" << min << ":" << sec << endl;
+
+	*/
+
+
+	//int x=10, y=5;
+	//
+	//cout << "x value\ty value\texpressions\tresults\n";
+
+	//cout << x << "\t" << y << "\t" << "x=y+3 \t\t " << y+3 << endl;
+	//cout << x << "\t" << y << "\t" << "x=y-2 \t\t " << y-2 << endl;
+	//cout << x << "\t" << y << "\t" << "x=y*5 \t\t " << y*5 << endl;
+	//cout << x << "\t" << y << "\t" << "x=x/y \t\t " << x/y << endl;
+	//cout << x << "\t" << y << "\t" << "x=x%y \t\t " << x%y << endl;
+
+
+
+
+	system("pause");
+	return 0;
+
+}

@@ -1,0 +1,107 @@
+#include<iostream>
+#include<iomanip>
+#include<cmath>
+#include<string>
+using namespace std;
+int main ()
+{
+	/* Q2
+
+	double speed, time, distance;
+
+	cout << "Enter speed and time: ";
+	cin >> speed >> time;
+	cout << endl;
+
+	distance = speed * time;
+	 cout << " The distance is " << distance << " km" << endl;*/
+
+	/* Q3
+	
+	double fahrenheit, celcius;
+	cout << "Enter temperature in celcius: ";
+	cin >> celcius;
+	cout << endl;
+	fahrenheit = 9/5.0*celcius + 32;
+	cout << "The temperature in fahrenheit is " << fahrenheit << endl;*/
+	
+	/* Q4
+	
+	int no1, no2, no3, no4, no5, no6, no7, no8, no9, no10;
+	cout << "Enter 10 numbers: ";
+	cin >> no1 >> no2 >> no3 >> no4 >> no5 >> no6 >> no7 >> no8 >> no9 >> no10;
+	cout << endl << endl;
+
+	cout << "Your numbers are: " << endl;
+	cout << no1 << "\t\t" << no10 << endl;
+	cout << no2 << "\t\t" << no9 << endl;
+	cout << no3 << "\t\t" << no8 << endl;
+	cout << no4 << "\t\t" << no7 << endl;
+	cout << no5 << "\t\t" << no6 << endl;*/
+
+	/* Q5 
+	
+	double distance, suitcase, fare, charge, total;
+
+	cout << "Distance travelled (km): ";
+	cin >> distance;
+	cout << endl;
+
+	cout << "Number of large suitcases: ";
+	cin >> suitcase;
+	cout << endl;
+
+	fare = 2 + 0.5*distance;
+	charge = 1.5 * suitcase;
+	total = fare + charge;
+
+	cout << fixed << showpoint << setprecision(2);
+	cout << "Total for trip: RM " << fare << endl;
+	cout << "Total for suitcases: RM" << charge << endl << endl;
+	cout << "Grand total for the trip: RM " << total << endl;*/
+
+	/* Q6
+	
+	double a, b, c, r1, r2, discriminant;
+
+	cout << "Enter a, b, c: ";
+	cin >> a >> b >> c;
+	cout << endl;
+
+	discriminant = b * b - 4 * a * c;
+
+	if (discriminant <0)
+	{
+		cout << "The equation has no roots" << endl;
+	}
+
+	else if (discriminant == 0)
+	{
+		r1 = (-b + sqrt(discriminant)) / 2 * a; 
+		cout << "The root is " << r1 << endl;
+	}
+
+	else 
+	{	r1 = (-b + sqrt(discriminant)) / 2 * a; 
+		r2 = (-b - sqrt(discriminant)) / 2 * a;
+		cout << "The roots are " << r1 << "and" << r2 << endl;
+	}*/
+
+	/* Q7
+
+	int hr, min, sec, time;
+
+	cout << "Enter elapsed time on hours, minutes and seconds: ";
+	cin >> hr >> min >> sec;
+	cout << endl;
+
+
+	time = hr*3600 + min*60 + sec;
+
+	cout << "If the elapsed time is " << hr << ":"<< min << ":" << sec <<". Then the output is "
+		<< time << " seconds" << endl;*/
+
+
+	 system ("pause");
+	 return 0;
+}

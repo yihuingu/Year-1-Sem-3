@@ -1,0 +1,1980 @@
+/*This is a program of online hotel reservation system which allowed users to book their hotel room efficiently and accurately with
+choice of ten different places. Users can register as member to make their booking easily. This program is only allowed
+for short term-stay reservation.*/
+
+#include <iostream>							//Call library
+#include <fstream>
+#include <string>
+#include <iomanip>
+#include <cmath>
+#include <cstdlib>
+#include <cctype>
+#include <ctime>
+#include<stdio.h>
+#include<stdlib.h>
+#include<Windows.h>
+
+using namespace std;
+
+//Function prototype
+void welcome();			//Diplay name of hotel
+void menu();			//Let user to choose to login or register
+void showMenu();		//Main menu of the program
+void login();
+void registeration();
+void overWriteFile();	//Save data into file
+bool testAlpha(char[]);
+bool testDigit(char[]);
+void search();			//Allow user to enter term for their stay
+void availability();
+void suggestion();		//Display facilities provided by the hotel
+void placeIntro();		//Display introduction to various hotel location 
+void update();			//A function to modify password for user
+void updatedInfo();		//Display user profile 
+void roomUnit();		//Display info for 6 different types of rooms
+void reserve1();
+void reserve2();
+void reserve3();
+void reserve4();
+void reserve5();
+void reserve6();
+void payment();
+void discount();
+void creditcard();
+void feedback();		//Allow user to give feedback
+void thx();
+
+struct Date
+{
+	int day, month, year;
+};
+char name[100], ic[20], cnum[20], email[100], password[20], repassword[20], username[20], file_name[20];			//Declare global variables
+int city = 0, book_no = 11300;
+int numStay = 0, room = 0, day1 = 0, day2 = 0, mon1 = 0, mon2 = 0, yr1 = 0, yr2 = 0;
+double price = 0.00, total = 0.00;
+
+//Text Animation
+void loading()
+{
+	system("cls");
+	cout << "\n\n\n\n\n\n\n\t\tRedirecting to Payment Gateway......";
+	cout << "\n\n\t\tL"; Sleep(200);
+	cout << "O"; Sleep(400);
+	cout << "A"; Sleep(400);
+	cout << "D"; Sleep(400);
+	cout << "I"; Sleep(400);
+	cout << "N"; Sleep(400);
+	cout << "G"; Sleep(400);
+	cout << "."; Sleep(400);
+	cout << "."; Sleep(400);
+	cout << "."; Sleep(400);
+	system("cls");
+	creditcard();
+}
+
+int main()
+{
+	char file_name[] = "0";
+	welcome();
+
+	system("pause");
+	return 0;
+}
+
+void welcome()
+{
+	int choice;
+	time_t now = time(0);
+	char * dt = ctime(&now);
+
+	system("COLOR 0B");
+	cout << endl <<
+		"\n\n\t\t  * * * * * * * * * * * * * * * * * * * * * * *  "
+		"\n\n\t\t  *                  Welcome                  *  "
+		"\n\n\t\t  *          /\\                               * "
+		"  \n\t\t          /\\/~~\\/\\     << E V E R E S T >>    "
+		"  \n\t\t  *      /~~\\  /~~\\                           *"
+		"  \n\t\t        /____\\/____\\          HOTEL            "
+		"  \n\t\t  *                                           *  "
+		"  \n\t\t                             Malaysia            "
+		"  \n\t\t  *  ---------------------------------------- *  "
+		"\n\n\t\t  *   1. Continue                             *  "
+		"\n\n\t\t  *   2. Exit                                 *  "
+		"\n\n\t\t  * * * * * * * * * * * * * * * * * * * * * * *\n\n"
+		"\t\t\t" << dt << endl << endl;
+
+	cout << "\t\tPlease enter your selection --- ";
+	cin >> choice;
+
+	//To validate the option entered by the user 
+	switch (choice)
+	{
+	case 1: {
+		system("cls");
+		menu();
+	}
+			break;
+	case 2: {
+		system("cls");
+		thx();
+		system("pause");
+		exit(0);
+	}
+			break;
+	default: {
+		system("COLOR 0A");
+		cout << "\t\t\aYour option only 1, and 2. \n\t\t";
+		cin.clear();
+		cin.ignore(200, '\n');
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		welcome();
+	}
+			 break;
+	}
+
+}
+
+void menu()
+{
+	int choice;
+	system("COLOR 07");
+
+	cout << "\n\n\t\t  * * * * * * * * * * * * * * * * * * * * * * *  "
+		"\n\n\t\t  *               Welcome to                  *  "
+		"\n\n\t\t  *          /\\                               * "
+		"  \n\t\t          /\\/~~\\/\\     << E V E R E S T >>    "
+		"  \n\t\t  *      /~~\\  /~~\\                           *"
+		"  \n\t\t        /____\\/____\\          HOTEL            "
+		"  \n\t\t  *                                           *  "
+		"  \n\t\t                The Paradise Awaits...           "
+		"  \n\t\t  *  ---------------------------------------- *  "
+		"\n\n\t\t  *   1. Log In                               *  "
+		"\n\n\t\t  *   2. Register                             *  "
+		"\n\n\t\t  * * * * * * * * * * * * * * * * * * * * * * *\n\n";
+
+	cout << "\t\tPlease enter your selection --- ";
+	cin >> choice;
+
+	//To validate the option entered by the user 
+	switch (choice)
+	{
+	case 1: {
+		system("cls");
+		login();
+	}
+			break;
+	case 2: {
+		system("cls");
+		registeration();
+	}
+			break;
+	default: {
+		system("COLOR 0A");
+		cout << "\t\t\aYour option only 1 and 2. \n\t\t";
+		cin.clear();
+		cin.ignore(200, '\n');
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		menu();
+	}
+			 break;
+	}
+}
+
+void login()
+{
+	char fileName[15], login_password[20];
+	int count_password = 0;
+	char txt[] = ".txt";
+	fstream file;
+	system("COLOR 07");
+	cin.ignore();
+	cout << "\n\n\n\t\t\t              Login						 " << endl << endl;
+	cout << "\t\t------------------------------------------------" << endl << endl;
+	cout << "\t\tEnter Username : ";
+	cin.getline(username, 20);
+	cin.clear();
+
+	//To validate the username entered by the user 
+	while (strlen(username) < 8)
+	{
+		cout << "\n\t\t\aUsername (at least 8 characters). Re-enter username: ";
+		cin.getline(username, 20);
+	}
+
+	strcpy(fileName, username);
+	strcat(fileName, txt);				//username entered by user is joined with string "txt"	
+	file.open(fileName, ios::in);
+	strcpy(file_name, fileName);
+
+	if (file.fail())			//if the file open failed, the following statements will be executed
+	{
+		cout << "\t\t\aThis username does not exist. PLease register an account first. " << endl << "\t\t";//if the user does not used before, then it will display.
+		system("pause");
+		system("CLS");
+		menu();
+	}
+	else
+	{
+		file.getline(name, 100);					//Get data from file
+		file.getline(ic, 20);
+		file.getline(cnum, 20);
+		file.getline(email, 100);
+		file.getline(username, 20);
+		file.getline(password, 20);
+		file.getline(repassword, 20);
+	}
+
+	cout << "\n\t\tEnter Password : ";
+	cin.getline(login_password, 20);
+
+	for (int i = 3; i > 0; i--)
+	{
+
+		//To validate the login password entered by the user 
+		while (strlen(login_password) != 6)
+		{
+
+			cout << "\n\t\tEnter only 6 characters. " << endl;
+			cout << "\t\tRe-enter password: ";
+			cin.getline(login_password, 20);
+		}
+
+		bool flag = 0;
+		for (int j = 0; j < 6; j++)
+		{
+			if (login_password[j] != password[j])
+				flag++;
+		}
+		if (flag != 0)					//User have only 3 times of trial for password
+		{
+			if (i - 1 > 0)
+			{
+				cout << "\n\n\t\t\aINCORRECT password. You left " << i - 1 << " time(s) to enter your password " << endl << "\t\t"; //to inform user how many times they can reenter the password
+				cin.getline(login_password, 20);
+				while (strlen(login_password) != 6)
+				{
+
+					cout << "\n\t\t\aEnter only 6 characters. " << endl;
+					cout << "\t\tRe-enter password: ";
+					cin.getline(login_password, 20);
+				}
+			}
+
+			else							//Return to menu function of the program
+			{
+				HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+				SetConsoleTextAttribute(h, FOREGROUND_RED | FOREGROUND_INTENSITY);
+				cout << "\n\n\t\t\a\a\aSorry, you had used all of your chance\n\t\tto enter the correct password. " << endl;
+				cout << "\t\tPlease either login again or register for a new account. " << endl << "\t\t";
+				system("pause");
+				system("cls");
+				menu();
+			}
+		}
+		else
+		{
+			cout << "\n\t\tLog in successful.\n\n";
+			cout << "\t\t------------------------------------------------" << endl << "\t\t";
+			system("pause");
+			system("cls");
+			showMenu();
+			system("pause");
+			exit(0);
+		}
+	}
+	file.close();
+}
+
+void showMenu()
+{
+	int menuOption;
+	fstream file;
+	string File = "feedback", comments;
+	char choice[10];
+	char logout[] = "Y", logout2[] = "y";
+	char menu[] = "N", menu2[] = "n";
+
+	cout << "\n\n\n\n\t\t**************************************\n\n";
+	cout << "\t\t\t      Main Menu\n\n";
+	cout << "\t\t**************************************\n\n";
+	cout << "\t\t[1] Hotel Reservation \n";
+	cout << "\t\t[2] Suggestion \n";
+	cout << "\t\t[3] Update Personal Data \n";
+	cout << "\t\t[4] Comments and Feedbacks \n";
+	cout << "\t\t[5] Log Out \n\n\n";
+	cout << "\t\tPlease enter your selection: ";
+	cin >> menuOption;
+
+	switch (menuOption)
+	{
+	case 1:
+	{
+		system("cls");
+		search();
+	}
+	break;
+	case 2:
+	{
+		system("cls");
+		suggestion();
+	}
+	break;
+	case 3:
+	{
+		system("cls");
+		update();
+	}
+	break;
+	case 4:
+	{
+		system("cls");
+		File = File + ".txt";
+		file.open(File, ios::in);
+		if (file.fail())
+		{
+			cout << "\n\n\t\tNo previous comments were found. \n\n\t\t";
+			system("pause");
+			system("cls");
+			showMenu();
+		}
+		cout << endl;
+		cout << "                             Feedbacks and Comments                             " << endl;
+		cout << "********************************************************************************" << endl;
+		while (!file.eof()) //informations will get continuous reading until the end of file
+		{
+			getline(file, comments);
+			cout << comments << endl;
+		}
+		file.close();
+		system("pause");
+		system("cls");
+		showMenu();
+	}
+	break;
+	case 5:
+	{
+		system("cls");
+	LOGOUT:	cout << "\n\n\n\t\t		Logout \n\n"
+		"\t\t**************************************\n\n";
+			cout << "\t\tAre you sure you want to log out?(Y or N): ";
+			cin >> choice;
+
+
+			while (strlen(choice) != strlen(logout))
+			{
+				cout << "\n\t\tYour choice must be \"y\" or \"n\" only. \n\n\t\t";
+				system("pause");
+				system("cls");
+				goto LOGOUT;
+			}
+
+			while (strcmp(choice, logout) == 0 || strcmp(choice, logout2) == 0)
+			{
+				system("cls");
+				welcome();
+			}
+
+			while (strcmp(choice, menu) == 0 || strcmp(choice, menu2) == 0)
+			{
+				showMenu();
+			}
+			cout << "\t\tYour choice must be \"y\" or \"n\" only. \n\t\t";
+			system("pause");
+			system("cls");
+			goto LOGOUT;
+	}
+	break;
+	default:								//Validate the menuOption entered
+	{
+		system("COLOR 0A");
+		cout << "\t\tYour option only 1, 2, 3 and 4. \n\t\t";
+		cin.clear();
+		cin.ignore(100, '\n');
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		showMenu();
+	}
+	break;
+	}
+}
+
+void registeration()
+{
+	cin.ignore();
+	fstream file;
+	char choice, txt[] = ".txt";
+	system("COLOR 07");
+	cout << "\n\n\t\t**************************************\n";
+	cout << "\t\t*                                    *\n";
+	cout << "\t\t*            Registeration           *\n";
+	cout << "\t\t*                                    *\n";
+	cout << "\t\t**************************************\n" << endl;
+
+	cout << "\t\tFull Name: ";
+	cin.getline(name, 100);
+	while (testAlpha(name))
+	{
+		cout << "\t\tPlease enter alphabet only.\n";								////Validate name must be alphabeth
+		cout << "\t\tRe-enter again: ";
+		cin.getline(name, 100);
+	}
+	cout << endl;
+
+	cout << "\t\tIC No(without'-'): ";									//Validate the ic length and must be digit
+	cin.getline(ic, 20);
+	while (strlen(ic) != 12 || testDigit(ic))
+	{
+		cout << "\t\tIC (12 digits) without '-'.Re-enter again: ";
+		cin.getline(ic, 20);
+	}
+	cout << endl;
+
+	cout << "\t\tContact Number(without'-'): ";
+	cin.getline(cnum, 20);
+	while (testDigit(cnum) || strlen(cnum)<10 || strlen(cnum)>15)					//Validate the contact number length and must be digit
+	{
+		cout << "\t\tContact Number( 10-15 digits) without '-'.\n";
+		cout << "\t\tRe-enter again: ";
+		cin.getline(cnum, 20);
+	}
+	cout << endl;
+
+	cout << "\t\tEmail: ";
+	cin.getline(email, 100);
+email:	int count = 0;
+
+	do
+	{																		//Validate email address must end with .com
+		int j = strlen(email);
+		if (email[j - 1] != 'm')
+		{
+			count++;
+		}
+		if (email[j - 2] != 'o')
+		{
+			count++;
+		}
+		if (email[j - 3] != 'c')
+		{
+			count++;
+		}
+		if (email[j - 4] != '.')
+		{
+			count++;
+		}
+		if (count != 0)
+		{
+			cout << "\t\tEmail address should end with \'.com\': ";
+			cin.getline(email, 100);
+			goto email;
+		}
+	} while (count != 0);
+
+REG:cout << "\n\t\tUsername(at least 8 characters): ";
+	cin.getline(username, 20);
+	while (strlen(username)<8)
+	{
+		cout << "\t\tUsername must be at least 8 characters: ";								//Validate username length
+		cin.getline(username, 20);
+	}
+	cout << endl;
+
+	strcpy(file_name, username);
+	strcat(file_name, txt);									//username entered by user is joined with string "txt"
+
+	file.open(file_name, ios::in);				//file is read depending on the username input
+
+	if (file)							//to validate the existing of the account
+	{
+		cout << "\t\tThis username has been used.\n"
+			<< "\t\tPlease try other username.\n";
+		file.close();
+		goto REG;
+	}
+
+	cout << "\t\tPassword (6 characters): ";
+	cin.getline(password, 20);
+	cout << endl;
+	while (strlen(password) != 6)														//Validate password length
+	{
+		cout << "\t\tPassword must have 6 characters: ";
+		cin.getline(password, 20);
+	}
+
+	cout << "\t\tRe-enter Password: ";
+	cin.getline(repassword, 20);
+	while (strlen(repassword) != 6)
+	{
+		cout << "\t\tPassword must have 6 characters: ";
+		cin.getline(repassword, 20);
+	}
+CHECK:	bool flag2 = 0;
+	do
+	{
+		bool flag2 = 0;
+		for (int i = 0; i < 6; i++)
+		{
+			if (password[i] != repassword[i])												//compare password must be equal to repassword
+				flag2++;
+		}
+		if (flag2 != 0)
+		{
+			cout << "\t\tPassword not the same, re-entered again: ";
+			cin.getline(repassword, 20);
+			cout << endl;
+			goto CHECK;
+
+		}
+	} while (flag2 != 0);
+	cout << endl;
+
+	cout << "\t\t[1]Confirm (y/n):";
+	cin >> choice;
+	choice = toupper(choice);
+	while (choice != 'Y' && choice != 'N')
+	{
+		cout << "\t\tInvalid input! Re-enter again.";
+		cin >> choice;
+		choice = toupper(choice);
+	}
+
+	if (choice == 'Y')
+	{
+		cout << "\n\t\t-------------------------------------------------";
+		cout << "\n\t\tYour account had been sucessfully created. \1\2\1" << endl << "\t\t";
+		strcpy(file_name, username);
+		strcat(file_name, txt);
+		overWriteFile();																	//Calls the function to save data into file
+		system("pause");
+		system("cls");
+		showMenu();
+	}
+	else
+	{
+		system("cls");
+		menu();
+	}
+}
+
+void overWriteFile()
+{
+	fstream file;
+
+	file.open(file_name, ios::out);
+
+	file << name << endl;
+	file << ic << endl;
+	file << cnum << endl;
+	file << email << endl;
+	file << username << endl;
+	file << password << endl;
+	file << repassword << endl;
+	file << city << endl;
+	file << day1 << endl;
+	file << day2 << endl;
+	file << mon1 << endl;
+	file << mon2 << endl;
+	file << yr1 << endl;
+	file << yr2 << endl;
+	file << numStay << endl;
+	file << room << endl;
+	file << price << endl;
+
+	file.close();
+}
+
+void search()
+{
+	fstream file;
+
+	int choice;
+	char temporary[20];
+	Date date[2];
+
+	//Open the output file
+	file.open(file_name, ios::out | ios::app);
+	cout << "\n\n\t\t**************************************\n\n";
+	cout << "\t\t\t   Hotel Reservation\n\n";
+	cout << "\t\t**************************************\n\n";
+	cout << "\t\t[1] Langkawi\n";
+	cout << "\t\t[2] Penang\n";
+	cout << "\t\t[3] Ipoh\n";
+	cout << "\t\t[4] Kuala Lumpur\n";
+	cout << "\t\t[5] Johor Bahru\n";
+	cout << "\t\t[6] Tenrengganu\n";
+	cout << "\t\t[7] Pulau Redang\n";
+	cout << "\t\t[8] Melaka\n";
+	cout << "\t\t[9] Cameran Highlands\n";
+	cout << "\t\t[10] Kundasang\n\n";
+
+	cout << "\t\tPlease choose the city you are going:";
+	cin >> city;																//Read place interested of user
+	cout << endl;
+
+	switch (city)
+	{
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+	case 10:
+		break;
+	default: {
+		system("COLOR 0A");
+		cout << "\t\tYour option only 1 to 10. \n\t\t";
+		cin.ignore(100, '\n');
+		cin.clear();
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		search();
+	}
+	}
+
+	cin.ignore();
+	for (int i = 0; i < 2; i++)
+	{
+		if (i == 0)
+			cout << "\n\t\tCheck-in Date (Year): ";				//Read year
+		else
+			cout << "\n\t\tCheck-out Date (Year): ";
+
+		cin.getline(temporary, 20);
+
+		while (testDigit(temporary) || strlen(temporary) != 4)		//Validate year to be int
+		{
+			cout << "\t\tInvalid year. Enter year (YYYY):  ";
+			cin.getline(temporary, 20);
+		}
+		cout << endl;
+
+		date[i].year = atoi(temporary);			//Convert c string year to int
+
+		while (date[i].year < 2017 || date[i].year > 2018)		//Validate booking must be within 2 years
+		{
+			cout << "\t\tThis program can only process booking within 2 years. \n\t\tRe-enter year(YYYY): ";		//Validate year must be int
+			cin.getline(temporary, 20);
+
+			while (testDigit(temporary) || strlen(temporary) != 4)		//Validate year to be int
+			{
+				cout << "\t\tInvalid year. Enter year (YYYY):  ";
+				cin.getline(temporary, 20);
+				cin.ignore();
+			}
+			cout << endl;
+
+			date[i].year = atoi(temporary);
+		}
+
+		//Read month
+		if (i == 0)
+			cout << "\n\t\tCheck-in Date (Month): ";
+		else
+			cout << "\n\t\tCheck-out Date (Month): ";
+		cin.getline(temporary, 20);
+
+		while (testDigit(temporary))		//Validate month to be int
+		{
+			cout << "\t\tEnter number for month:  ";
+			cin.getline(temporary, 20);
+		}
+		cout << endl;
+		date[i].month = atoi(temporary);		//convert month to int
+
+		//Read day
+		if (i == 0)
+			cout << "\n\t\tCheck-in Date (Day): ";
+		else
+			cout << "\n\t\tCheck-out Date (Day): ";
+		cin.getline(temporary, 20);
+
+		while (testDigit(temporary))		//Validate day to be int
+		{
+			cout << "\t\tEnter number for day:  ";
+			cin.getline(temporary, 20);
+		}
+		cout << endl;
+		date[i].day = atoi(temporary);				//Convert day into int
+
+		//Validate days in months
+		while (date[i].month < 1 || date[i].month > 12)
+		{
+			cout << "\t\tInvalid date, please re-enter the month: ";
+			cin.getline(temporary, 20);
+			cin.ignore();
+
+			while (testDigit(temporary))		//Validate month to be int
+			{
+				cout << "\t\tEnter number for month:  ";
+				cin.getline(temporary, 20);
+			}
+			cout << endl;
+			date[i].month = atoi(temporary);
+		}
+
+		if (date[i].month == 1 || date[i].month == 3 || date[i].month == 5 || date[i].month == 7 || date[i].month == 8
+			|| date[i].month == 10 || date[i].month == 12)
+		{
+			while (date[i].day < 1 || date[i].day>31)
+			{
+				cout << "\t\tInvalid day.Re-enter the day again: ";
+				cin.getline(temporary, 20);
+				cin.ignore();
+
+				while (testDigit(temporary))		//Validate day to be int
+				{
+					cout << "\t\tEnter number for day:  ";
+					cin.getline(temporary, 20);
+				}
+				cout << endl;
+				date[i].day = atoi(temporary);
+			}
+
+		}
+
+		if (date[i].month == 2)
+		{
+			if (date[i].year % 4 != 0)
+			{
+				while (date[i].day < 1 || date[i].day > 28)
+				{
+					cout << "\t\tInvalid day.Re-enter the day again: ";
+					cin.getline(temporary, 20);
+					cin.ignore();
+
+					while (testDigit(temporary))		//Validate day to be int
+					{
+						cout << "\t\tEnter number for day:  ";
+						cin.getline(temporary, 20);
+					}
+					cout << endl;
+					date[i].day = atoi(temporary);
+				}
+			}
+			else
+			{
+				while (date[i].month < 1 || date[i].day > 29)
+				{
+					cout << "\t\tInvalid day.Re-enter the day again: ";
+					cin.getline(temporary, 20);
+					cin.ignore();
+
+					while (testDigit(temporary))		//Validate day to be int
+					{
+						cout << "\t\tEnter number for day:  ";
+						cin.getline(temporary, 20);
+					}
+					cout << endl;
+					date[i].day = atoi(temporary);
+				}
+			}
+		}
+		if (date[i].month == 4 || date[i].month == 6 || date[i].month == 9 || date[i].month == 11)
+		{
+			while (date[i].month < 1 || date[i].month > 30)
+			{
+				cout << "\t\tInvalid date.Re-enter the day again: ";
+				cin.getline(temporary, 20);
+				cin.ignore();
+
+				while (testDigit(temporary))		//Validate day to be int
+				{
+					cout << "\t\tEnter number for day:  ";
+					cin.getline(temporary, 20);
+				}
+				cout << endl;
+				date[i].day = atoi(temporary);
+			}
+		}
+
+		cout << endl;
+	}
+
+
+	if (date[1].year == date[0].year && date[1].month == date[0].month)			//Validate check out day must be after check in day
+	{
+		while (date[1].day < date[0].day)
+		{
+			cout << "\t\tCheck-out day must be after Check-in day.\n\t\tRe-enter check out day: ";
+			cin.getline(temporary, 20);
+			cin.ignore();
+
+			while (testDigit(temporary))		//Validate day to be int
+			{
+				cout << "\t\tEnter number for day:  ";
+				cin.getline(temporary, 20);
+			}
+			cout << endl;
+			date[1].day = atoi(temporary);
+		}
+	}
+
+	while (date[1].year < date[0].year)					//Validate check out year must be after check in year
+	{
+		cout << "\t\tCheck-out year must be after Check-in year or in the same year.\n\t\tRe-enter check out year: ";
+		cin.getline(temporary, 20);
+		cin.ignore();
+
+		while (testDigit(temporary) || strlen(temporary) != 4)		//Validate year to be int
+		{
+			cout << "\t\tInvalid year. Enter year (YYYY):  ";
+			cin.getline(temporary, 20);
+			cin.ignore();
+		}
+		cout << endl;
+
+		date[1].year = atoi(temporary);
+	}
+
+	if (date[1].year == date[0].year)
+	{
+		while (date[1].day < date[0].day)					//Validate check out month must be after check in month, different months
+		{
+			if (date[1].month <= date[0].month)
+			{
+				cout << "\t\tInvalid input. Check-in month cannot be after Check-out month.\n\t\tRe-enter check out month: ";
+				cin.getline(temporary, 20);
+				cin.ignore();
+
+				while (testDigit(temporary))		//Validate month to be int
+				{
+					cout << "\t\tEnter number for month:  ";
+					cin.getline(temporary, 20);
+				}
+				cout << endl;
+				date[1].month = atoi(temporary);
+			}
+		}
+	}
+
+	//Calculation of the number of night staying in
+
+	if (date[1].year > date[0].year)									//Calculate for different year interval
+	{
+		if (date[1].month == 1)
+			numStay = numStay = (31 - date[0].day) + date[1].day;
+		else
+		{
+			cout << "\n\n\t\tPlease contact us to manage your booking\n\t\tfor long stay more than 15 days." << endl;
+			cout << "\t\tFix Line: 03-80647812" << endl << "\t\t";
+			system("pause");
+			system("cls");
+			showMenu();
+		}
+	}
+
+	if (date[0].month == date[1].month)
+	{
+		numStay = date[1].day - date[0].day;				//Calculate nights of stay in the same month
+	}
+	else if (date[1].month > date[0].month)						//Calculate nights of stay in different month
+	{
+		switch (date[0].month)
+		{
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+		{
+			numStay = (31 - date[0].day) + date[1].day;
+		}
+		break;
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+		{
+			numStay = (30 - date[0].day) + date[1].day;
+		}
+		break;
+		default:
+		{
+			if (date[0].year % 4 != 0)
+			{
+				numStay = (28 - date[0].day) + date[1].day;
+			}
+			else
+			{
+				numStay = (29 - date[0].day) + date[1].day;
+			}
+		}
+		}
+	}
+
+	if (numStay > 15)
+	{
+		cout << "\n\t\tPlease contact us to manage your booking\n\t\tfor long stay more than 15 days." << endl;
+		cout << "\t\tFix Line: 03-80647812" << endl << "\t\t";
+		system("pause");
+		system("cls");
+		showMenu();
+	}
+
+	else if (numStay == 0)		//Validate cannot check in and check out on the same day
+	{
+		cout << "\n\t\tInvalid input of dates. PLease try again. \n\t\t";
+		system("pause");
+		system("cls");
+		search();
+	}
+	else
+		cout << "\t\tCheck-in Date: " << date[0].day << '/' << date[0].month << '/' << date[0].year << endl;	//Display date entered by user
+	cout << "\t\tCheck-out Date: " << date[1].day << '/' << date[1].month << '/' << date[1].year << endl;
+	cout << "\t\tNumber of nights: " << numStay << endl;
+
+
+	day1 = date[0].day;							//copy the info into variables
+	day2 = date[1].day;
+	mon1 = date[0].month;
+	mon2 = date[1].month;
+	yr1 = date[0].year;
+	yr2 = date[1].year;
+	overWriteFile();							//Write the information to the file
+	file.close();
+	cout << "\t\t[1] Check Availability.\n";
+	cout << "\t\t[2] Back.\n\t\t";
+	cin >> choice;
+	switch (choice)
+	{
+	case 1: {
+		system("cls");
+		roomUnit();
+	}
+			break;
+	case 2: {
+		system("cls");
+		showMenu();
+	}
+			break;
+	default: {
+		system("COLOR 0A");
+		cout << "\t\tYour option only 1 and 2. \n\t\t";
+		cin.clear();
+		cin.ignore(100, '\n');
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		search();
+	}
+			 break;
+	}
+}
+
+void suggestion()
+{
+	int choice;
+	cout << "\n\n\t\t************************************\n";
+	cout << "\t\t*                                  *\n";
+	cout << "\t\t*            Suggestion            *\n";
+	cout << "\t\t*                                  *\n";
+	cout << "\t\t************************************\n";
+
+	cout << "\t\t[1] Hotel Facilities" << endl;
+	cout << "\t\t[2] Transportation" << endl;
+	cout << "\t\t[3] Introduction to Places" << endl;
+	cout << "\t\t[4] Back" << endl;
+	cout << "\t\tPlease enter your selection: ";
+	cin >> choice;
+
+	if (choice < 1 || choice > 4 || !cin)
+	{
+		system("COLOR 0A");
+		cout << "\t\tInvalid entries!" << endl;
+		cout << "\t\tPlease enter either 1, 2, 3 or 4" << endl << "\t\t";
+		system("pause");
+		cin.clear();
+		cin.ignore();
+		system("cls");
+		system("COLOR 07");
+		suggestion();
+	}
+	system("cls");
+
+	if (choice == 1)
+	{
+		cout << "\n\n\n\n\t\tBelow are some of the hotel facilities:" << endl << endl;
+		cout << "\t\t~ Fresh water swimming pool with sun-loungers." << endl;
+		cout << "\t\t~ Pool bar offering drinks & light snacks." << endl;
+		cout << "\t\t~ Daily newspaper with breakfast." << endl;
+		cout << "\t\t~ Laundry & dry cleaning services." << endl;
+		cout << "\t\t~ Free Wi-Fi internet access throughout the hotel." << endl;
+		cout << "\t\t~ GYM room." << endl;
+		cout << endl << "\t\t";
+		system("pause");
+		system("cls");
+		suggestion();
+	}
+	else if (choice == 2)
+	{
+		cout << "\n\n\n\n\t\t\4 Van survice is provided to the nearby tourist spot." << endl;
+		cout << "\t\t\4 If you like to explore the environment by yourself, \n\t\twe also provide car for renting." << endl;
+		cout << "\t\tDo contact us for more info" << endl;
+		cout << "\t\tFix Line: 03-80647812" << endl << endl << "\t\t";
+		system("pause");
+		system("cls");
+		suggestion();
+	}
+	else if (choice == 3)
+	{
+		system("cls");
+		placeIntro();
+	}
+	else
+		showMenu();
+
+}
+
+void placeIntro()
+{
+	int place;
+
+	cout << "\n\n\t\tIntroduction to tourism places near the hotel: ";
+	cout << "\n\t\t----------------------------------------------------" << endl;
+	cout << "\t\t[1] Langkawi" << endl;
+	cout << "\t\t[2] Penang" << endl;
+	cout << "\t\t[3] Ipoh" << endl;
+	cout << "\t\t[4] Kuala Lumpur" << endl;
+	cout << "\t\t[5] Johor Bahru" << endl;
+	cout << "\t\t[6] Tenrengganu" << endl;
+	cout << "\t\t[7] Pulau Redang" << endl;
+	cout << "\t\t[8] Melaka" << endl;
+	cout << "\t\t[9] Cameran Highlands" << endl;
+	cout << "\t\t[10] Kundasang" << endl;
+	cout << "\t\t[0] Back" << endl << endl;
+
+	cout << "\t\tPlease choose the place you are going: ";
+	cin >> place;
+	cout << endl;
+
+	while (place<0 || place>10 || !cin)
+	{
+		system("COLOR 0A");
+		cout << "\t\tInvalid entries!" << endl;
+		cout << "\t\tPlease enter number between 1 to 10." << endl;
+		cin.clear();
+		cin.ignore();
+		system("pause");
+		system("cls");
+		system("COLOR 08");
+		placeIntro();
+	}
+	system("cls");
+
+	switch (place)
+	{
+	case 0: system("cls");
+		suggestion();
+
+	case 1:
+	{
+		cout << "\n\n\n\n\t\tMount Machincang" << endl << endl;
+		cout << "\t\t~Escape the heat from the city and enjoy cooling \n\t\tbreeze at the top of Mount Machincang." << endl << endl;
+		cout << "\t\t~Take the cable car and experience this beautiful \n\t\tjourney to the peak of the mountain " << endl << endl;
+		cout << "\t\tand be amazed with the breathtaking 360 panoramic \nviews of Langkawi." << endl;
+		cout << endl << "\t\t";
+		system("pause");
+		system("cls");
+		placeIntro();
+	}
+	break;
+
+	case 2:
+	{
+		cout << "\n\n\n\n\t\tClan Jetties" << endl << endl;
+		cout << "\t\t~Consisting of a row of wooden houses on stilts along \n\t\ta planked walkway built over the water," << endl << endl;
+		cout << "\t\t~The Clan Jetties are picturesque fishing villages \n\t\tlined along Weld Quay." << endl << endl;
+		cout << "\t\t~The traditional fishing settlements have been in \n\t\texistence since the 19th century." << endl << endl;
+		cout << "\t\t~Eight clan jetties can be found here –" << endl << endl;
+		cout << "\t\t~Chew Jetty, Koay Jetty, Lee Jetty, Lim Jetty, \n\t\tPeng Aun Jetty, Tan Jetty, Yeoh Jetty and Mixed Clans Jetty " << endl;
+		cout << endl << "\t\t";
+		system("pause");
+		system("cls");
+		placeIntro();
+	}
+	break;
+
+	case 3:
+	{
+		cout << "\n\n\n\n\t\tSam Poh Tong Temple" << endl << endl;
+		cout << "\t\t~The temple is located 5km south of Ipoh in \n\t\tGunung Rapat within a large limestone cavern." << endl << endl;
+		cout << "\t\t~Statues adorn the cavern, sitting alongside \n\t\tnatural stalactite and stalagmite formations." << endl << endl;
+		cout << "\t\t~A vegetarian restaurant, tortoise pond and \n\t\twishing well can be found here." << endl << endl;
+		cout << endl << "\t\t";
+		system("pause");
+		system("cls");
+		placeIntro();
+	}
+	break;
+
+	case 4:
+	{
+		cout << "\n\n\n\n\t\tPetronas Twin Tower" << endl << endl;
+		cout << "\t\t~Petronas Twin Towers were once the tallest \n\t\tbuildings in the world." << endl << endl;
+		cout << "\t\t~Now the world’s tallest twin structures, \n\t\tthe 88-storey buildings were designed by Cesar Pelli & Associates" << endl << endl;
+		cout << "\t\twith both towers joined at the 41st and \n\t\t42nd floors by a 58 metre-long, double-decker Sky Bridge." << endl << endl;
+		cout << endl << "\t\t";
+		system("pause");
+		system("cls");
+		placeIntro();
+	}
+	break;
+
+	case 5:
+	{
+		cout << "\n\n\n\n\t\tKite Museum" << endl << endl;
+		cout << "\t\t~The Kite Museum in Pasir Gudang is a \n\t\tfascinating display of colourful kites" << endl << endl;
+		cout << "\t\tin all manner of designs and shapes." << endl << endl;
+		cout << "\t\t~It also showcases the art of making kites besides" << endl << endl;
+		cout << "\t\thosting the annual International Kite Festival." << endl << endl;
+		cout << endl << "\t\t";
+		system("pause");
+		system("cls");
+		placeIntro();
+	}
+	break;
+
+	case 6:
+	{
+		cout << "\n\n\n\n\t\tPerhentian" << endl << endl;
+		cout << "\t\t~This is another magical, but often overlooked," << endl << endl;
+		cout << "\t\tisland off the coast of Terengganu with coral-rich \n\t\tgardens in its waters." << endl << endl;
+		cout << "\t\t~Often sought after by diving enthusiasts around the world, " << endl << endl;
+		cout << "\t\t~Perhentian Island is impressive, just like Redang." << endl << endl;
+		cout << endl << "\t\t";
+		system("pause");
+		system("cls");
+		placeIntro();
+	}
+	break;
+
+	case 7:
+	{
+		cout << "\n\n\n\n\t\tMarina Park" << endl << endl;
+		cout << "\t\t~The sea bed around the island holds a magnificent variety of life, " << endl << endl;
+		cout << "\t\tincluding moray eels, giant groupers and clown fish." << endl << endl;
+		cout << "\t\t~There is also shipwreck close to the jetty \n\t\twhich is perfect for exploration through snorkelling." << endl << endl;
+		cout << endl << "\t\t";
+		system("pause");
+		system("cls");
+		placeIntro();
+	}
+	break;
+
+	case 8:
+	{
+		cout << "\n\n\n\n\t\tA’Famosa Fort" << endl << endl;
+		cout << "\t\t~Built in 1511, A’Famosa used to sprawl across a whole hillside " << endl;
+		cout << "\t\tbut now only a lone gate (Porta de Santiago) remains. " << endl << endl;
+		cout << "\t\t~Originally constructed by Alfonso de Albuquerque " << endl;
+		cout << "\t\t(who led the Portuguese invasion on the Malacca Sultanate)," << endl;
+		cout << "\t\the remains of the fort is now a preserved whitewashed gatehouse " << endl;
+		cout << "\t\tand is located downhill from St. Paul’s Church. " << endl;
+		cout << endl << "\t\t";
+		system("pause");
+		system("cls");
+		placeIntro();
+	}
+	break;
+
+	case 9:
+	{
+		cout << "\n\n\n\n\n\t\tBharat Tea Estate" << endl << endl;
+		cout << "\t\t~Great views of the estate from the tea and souvenir shop " << endl;
+		cout << "\t\tlocated around 5km up from Ringlet on the main Tanah Rata road." << endl;
+		cout << "\t\t~At cooling temperatures, this tea shop is a wonderful \n\t\tplace to just sit back and relax, " << endl;
+		cout << "\t\tespecially after a long drive up the highlands." << endl;
+		cout << endl << "\t\t";
+		system("pause");
+		system("cls");
+		placeIntro();
+	}
+	break;
+	case 10:
+	{
+		cout << "\n\n\n\n\n\t\tKinabalu Park" << endl << endl;
+		cout << "\t\t~Kinabalu Park is most well-known for the possession of " << endl;
+		cout << "\t\toutstanding and gorgeous biological attributes in the park." << endl << endl;
+		cout << "\t\t~There are more than 5,000 types of vascular plant species, " << endl;
+		cout << "\t\tincluding the state’s treasured and rare Rafflesia species." << endl;
+		cout << endl << "\t\t";
+		system("pause");
+		system("cls");
+		placeIntro();
+	}
+	break;
+	}
+}
+
+void update()
+{
+	cin.ignore();
+	char oldpassword[15], newpassword[15];
+	fstream file;
+	int choice;
+
+	//Open the output file
+	file.open(file_name, ios::in);
+
+	//Read all the value
+	file.getline(name, 100);
+	file.getline(ic, 20);
+	file.getline(cnum, 20);
+	file.getline(email, 100);
+	file.getline(username, 20);
+	file.getline(password, 20);
+	file.getline(repassword, 20);
+
+	cout << "\n\n\t\t******************************************\n\n";
+	cout << "\t\t\t    Update Personal Info\n\n";
+	cout << "\t\t******************************************\n\n";
+	cout << "\t\tYou are only allowed to change your password.\n ";
+	cout << "\t\tCurrent Password : ";
+	cin.getline(oldpassword, 20);
+	cout << endl;
+
+	bool flag = 0;
+	do
+	{
+		flag = 0;
+		if (strlen(password) != 6)
+			flag++;
+		for (int j = 0; j < 6; j++)
+		{
+			if (oldpassword[j] != password[j])
+				flag++;
+		}
+		if (flag != 0)
+		{
+			cout << "\t\tPlease enter the correct current password : ";
+			cin.getline(oldpassword, 20);
+			cout << endl;
+		}
+	} while (flag != 0);
+
+	cout << "\t\tPlease enter the new password: ";		//prompt for new password
+	cin.getline(newpassword, 20);
+	while (strlen(newpassword) != 6)
+	{
+		cout << "\t\tPassword( MUST BE 6 characters): " << endl; //Validate password length
+		cin.getline(newpassword, 20);
+	}
+
+	file.close();										//close file
+
+	strcpy(password, newpassword);
+	overWriteFile();										// save updated password into file
+	cout << "\n\n\t\tYour information was updated.\n\t\t";
+	system("pause");
+	system("cls");
+	updatedInfo();
+}
+
+void updatedInfo()
+{
+	int choice;
+	fstream file;
+
+	//Open the output file
+	file.open(file_name, ios::in);
+
+	//Read all the value
+	file.getline(name, 100);
+	file.getline(ic, 20);
+	file.getline(cnum, 20);
+	file.getline(email, 100);
+	file.getline(username, 20);
+
+	cout << "\n\n\t\t******************************************\n\n";
+	cout << "\t\t\t     Personal Profile\n\n";
+	cout << "\t\t******************************************\n\n";
+	cout << "\t\tName          :  " << name << endl;
+	cout << "\t\tIC            :  " << ic << endl;
+	cout << "\t\tTelephone No. :  " << cnum << endl;
+	cout << "\t\tEmail         :  " << email << endl << endl << "\t\t";
+
+	file.close();
+	system("pause");
+	system("cls");
+	system("COLOR 07");
+	showMenu();
+}
+
+void reserve1()
+{
+	int choice;
+
+	cout << "\n\n\t\t**************************************\n\n";
+	cout << "\t\t\t Standard Single Room\n\n";
+	cout << "\t\t**************************************\n\n";
+	cout << "\t[Standard Single Room offer a  quiet retreat with luxury comforts,\n";
+	cout << "\tincluding sumptuous Hypnos bed and Bose iPod docking station.]\n\n";
+	cout << "\t~Room Facilities: Air conditioning, free Wi-Fi, sparkling mineral \n";
+	cout << "\twater, flat screen LCD TV with Freeview, hairdryer, fridge, \n";
+	cout << "\ttea&coffee-making facilities.\n";
+	cout << "\t~Room Size: 14meter square \n";
+	cout << "\t~Bed Size : 140cm wide bed\n";
+	cout << "\t~Price    : Rm80.00 (Breakfast Included)\n\n\n";
+	cout << "\t[1] Reserve\n";
+	cout << "\t[2] Back\n";
+	cout << "\t[3] Main menu\n\t\t";
+	cin >> choice;
+	switch (choice)
+	{
+	case 1: {
+		room = 1;
+		price = 80.00;
+		system("cls");
+		discount();
+	}
+			break;
+	case 2: {
+		system("cls");
+		roomUnit();
+	}
+			break;
+	case 3: {
+		system("cls");
+		showMenu();
+	}
+			break;
+	default: {
+		system("COLOR 0A");
+		cout << "\t\tYour option only 1, 2 and 3. \n\t\t";
+		cin.clear();
+		cin.ignore(100, '\n');
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		reserve1();
+	}
+			 break;
+	}
+}
+
+void reserve2()
+{
+	int choice;
+
+	cout << "\n\n\t\t**************************************\n";
+	cout << "\t\t\t Standard Double Room\n\n";
+	cout << "\t\t**************************************\n\n";
+	cout << "\t[Standard Double Room offers you a comfortable retreat after a \n";
+	cout << "\tbusy day. Whether you are coming for business or leisure our \n";
+	cout << "\tdouble room makes your stay relax.] \n\n";
+	cout << "\t~Room Facilities: Air conditioning, free Wi-Fi, sparkling mineral \n";
+	cout << "\twater, 42 inch flat screen TV, hairdryer, tea&coffee-making facilities \n";
+	cout << "\tfridge, safety locker with password. \n";
+	cout << "\t~Room Size: 18meter square \n";
+	cout << "\t~Bed Size : 160cm wide bed\n";
+	cout << "\t~Price    : Rm110.00 (Breakfast Included) \n\n\n";
+	cout << "\t[1] Reserve\n";
+	cout << "\t[2] Back\n";
+	cout << "\t[3] Main menu\n\t\t";
+	cin >> choice;
+	switch (choice)
+	{
+	case 1: {
+		room = 2;
+		price = 110.00;
+		system("cls");
+		discount();
+	}
+			break;
+	case 2: {
+		system("cls");
+		roomUnit();
+	}
+			break;
+	case 3: {
+		system("cls");
+		showMenu();
+	}
+			break;
+	default: {
+		system("COLOR 0A");
+		cout << "\t\tYour option only 1, 2 and 3. \n\t\t";
+		cin.clear();
+		cin.ignore(100, '\n');
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		reserve2();
+	}
+			 break;
+	}
+}
+
+void reserve3()
+{
+	int choice;
+
+	cout << "\n\n\t\t**************************************\n";
+	cout << "\t\t\t Premier Room\n\n";
+	cout << "\t\t**************************************\n\n";
+	cout << "\t[Premier Room combines contemporary style with traditional \n";
+	cout << "\tcomfort to create the ultimate in luxury London accommodation.\n";
+	cout << "\tRoom Facilities: Air conditioning, free Wi-Fi, circular desk,\n";
+	cout << "\t42inch flat screen TV, hairdryer, Nespresso coffee machine, fridge,\n";
+	cout << "\tsafety locker with password, luxury mini bar with snacks.]\n\n";
+	cout << "\t~Room Size: 32meter square\n";
+	cout << "\t~Bed Size : King Size bed\n";
+	cout << "\t~Price    : Rm180.00 (Breakfast Included) \n\n\n";
+	cout << "\t[1] Reserve\n";
+	cout << "\t[2] Back\n";
+	cout << "\t[3] Main menu\n\t\t";
+	cin >> choice;
+	switch (choice)
+	{
+	case 1: {
+		room = 3;
+		price = 180.00;
+		system("cls");
+		discount();
+	}
+			break;
+	case 2: {
+		system("cls");
+		roomUnit();
+	}
+			break;
+	case 3: {
+		system("cls");
+		showMenu();
+	}
+			break;
+	default: {
+		system("COLOR 0A");
+		cout << "\t\tYour option only 1, 2 and 3. \n\t\t";
+		cin.clear();
+		cin.ignore(100, '\n');
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		reserve3();
+	}
+			 break;
+	}
+}
+
+void reserve4()
+{
+	int choice;
+
+	cout << "\n\n\t\t**************************************\n";
+	cout << "\t\t\t Standard Triple Room\n\n";
+	cout << "\t\t**************************************\n\n";
+	cout << "\t[Standard Triple Room are perfect for travellers with a small child.]\n\n";
+	cout << "\t~Room Facilities: Air conditioning, free Wi-Fi, sparkling mineral \n";
+	cout << "\twater, 42inch flat screen TV, hairdryer, tea&coffee-making facilities \n";
+	cout << "\tfridge, safety locker with password, iron and ironing board. \n";
+	cout << "\t~Room Size: 24meter square \n";
+	cout << "\t~Bed Size : Queen Size bed and converted sofa\n";
+	cout << "\t~Price    : Rm200.00 (Breakfast Included) \n\n";
+	cout << "\t[1] Reserve\n";
+	cout << "\t[2] Back\n";
+	cout << "\t[3] Main menu\n\t\t";
+	cin >> choice;
+	switch (choice)
+	{
+	case 1: {
+		room = 4;
+		price = 200.00;
+		system("cls");
+		discount();
+	}
+			break;
+	case 2: {
+		system("cls");
+		roomUnit();
+	}
+			break;
+	case 3: {
+		system("cls");
+		showMenu();
+	}
+			break;
+	default: {
+		system("COLOR 0A");
+		cout << "\t\tYour option only 1, 2 and 3. \n\t\t";
+		cin.clear();
+		cin.ignore(100, '\n');
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		reserve4();
+	}
+			 break;
+	}
+}
+
+void reserve5()
+{
+	int choice;
+
+	cout << "\n\n\t\t**************************************\n";
+	cout << "\t\t\t Superior Triple Room\n\n";
+	cout << "\t\t**************************************\n\n";
+	cout << "\t[Superior Triple Room is the best choice for family or a group of\n";
+	cout << "\tbuddy to have a rest after their journey.] \n\n";
+	cout << "\t~Room Facilities: Air conditioning, free Wi-Fi, sparkling mineral \n";
+	cout << "\twater, 42inch flat screen TV, hairdryer, tea&coffee-making facilities \n";
+	cout << "\tfridge, safety locker with password, minibar. \n";
+	cout << "\t~Room Size: 29meter square \n";
+	cout << "\t~Bed Size : Three separated 160cm wide bed\n";
+	cout << "\t~Price    : Rm220.00 (Breakfast Included) \n\n\n";
+	cout << "\t[1] Reserve\n";
+	cout << "\t[2] Back\n";
+	cout << "\t[3] Main menu\n\t\t";
+	cin >> choice;
+	switch (choice)
+	{
+	case 1: {
+		room = 5;
+		price = 220.00;
+		system("cls");
+		discount();
+	}
+			break;
+	case 2: {
+		system("cls");
+		roomUnit();
+	}
+			break;
+	case 3: {
+		system("cls");
+		showMenu();
+	}
+			break;
+	default: {
+		system("COLOR 0A");
+		cout << "\t\tYour option only 1, 2 and 3. \n\t\t";
+		cin.clear();
+		cin.ignore(100, '\n');
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		reserve5();
+	}
+			 break;
+	}
+}
+
+void reserve6()
+{
+	int choice;
+
+	cout << "\n\n\t\t**************************************\n";
+	cout << "\t\t\t Family Room\n\n";
+	cout << "\t\t**************************************\n\n";
+	cout << "\t[Enjoy spacious Family Room, leisure facilities and Kids Corner. \n";
+	cout << "\tThe Kids Corner will ensure your children enjoy their stay as \n";
+	cout << "\tmuch as you\\’ll enjoy yours.] \n\n";
+	cout << "\t~Room Facilities: Air conditioning, free Wi-Fi, sparkling  \n";
+	cout << "\tmineral water, 42inch flat screen TV, hairdryer, tea&coffee\n";
+	cout << "\t-making facilities, fridge, safety locker with password, iron\n";
+	cout << "\tand ironing board.";
+	cout << "\t~Room Size: 35meter square \n";
+	cout << "\t~Bed Size : Two separated Queen Size bed\n";
+	cout << "\t~Price    : Rm250.00 (Breakfast Included) \n\n\n";
+	cout << "\t[1] Reserve\n";
+	cout << "\t[2] Back\n";
+	cout << "\t[3] Main menu\n\t\t";
+	cin >> choice;
+	switch (choice)
+	{
+	case 1: {
+		room = 6;
+		price = 250.00;
+		system("cls");
+		discount();
+	}
+			break;
+	case 2: {
+		system("cls");
+		roomUnit();
+	}
+			break;
+	case 3: {
+		system("cls");
+		showMenu();
+	}
+			break;
+	default: {
+		system("COLOR 0A");
+		cout << "\t\tYour option only 1, 2 and 3. \n\t\t";
+		cin.clear();
+		cin.ignore(100, '\n');
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		reserve6();
+	}
+			 break;
+	}
+}
+
+void roomUnit()
+{
+	int roomChoice;
+
+	cout << "\n\n\t\t**************************************\n\n";
+	cout << "\t\t\t    Room Units\n\n";
+	cout << "\t\t**************************************\n\n";
+	cout << "\t\t[1] Standard Single Room	(max: 1ppl) \n";
+	cout << "\t\t[2] Standard Double Room	(max: 2ppl) \n";
+	cout << "\t\t[3] Premier Room		(max: 2ppl) \n";
+	cout << "\t\t[4] Standard Triple Room	(max: 3ppl) \n";
+	cout << "\t\t[5] Superior Triple Room 	(max: 3ppl) \n";
+	cout << "\t\t[6] Family Room			(max: 4ppl) \n" << endl;
+	cout << "\t\tPlease enter your selection: ";
+	cin >> roomChoice;
+
+	switch (roomChoice)
+	{
+	case 1: {
+		system("cls");
+		reserve1();
+	}
+			break;
+	case 2: {
+		system("cls");
+		reserve2();
+	}
+			break;
+	case 3: {
+		system("cls");
+		reserve3();
+	}
+			break;
+	case 4: {
+		system("cls");
+		reserve4();
+	}
+			break;
+	case 5: {
+		system("cls");
+		reserve5();
+	}
+			break;
+	case 6: {
+		system("cls");
+		reserve6();
+	}
+			break;
+	default: {
+		system("COLOR 0A");
+		cout << "\t\tYour option is only 1 - 6. \n\t\t";
+		cin.clear();
+		cin.ignore();
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		roomUnit();
+	}
+			 break;
+	}
+}
+
+void payment()
+{
+	int choice, room, city;
+	double price;
+	fstream file;
+	char ROOM1[20], City[20];
+
+	//Open the input file
+	file.open(file_name, ios::in);
+
+	//Read all the value
+	file.getline(name, 100);
+	file.getline(ic, 20);
+	file.getline(cnum, 20);
+	file.getline(email, 100);
+	file.getline(username, 20);
+	file.getline(password, 20);
+	file.getline(repassword, 20);
+	file >> city;
+	file.ignore();
+	file >> day1;
+	file >> day2;
+	file >> mon1;
+	file >> mon2;
+	file >> yr1;
+	file >> yr2;
+	file >> numStay;
+	file >> room;
+	file.ignore();
+	file >> price;
+
+	if (city == 1)
+		strcpy(City, "Langkawi");
+	else if (city == 2)
+		strcpy(City, "Penang");
+	else if (city == 3)
+		strcpy(City, "Ipoh");
+	else if (city == 4)
+		strcpy(City, "Kuala Lumpur");
+	else if (city == 5)
+		strcpy(City, "Johor Bahru");
+	else if (city == 6)
+		strcpy(City, "Tenrengganu");
+	else if (city == 7)
+		strcpy(City, "Pulau Redang");
+	else if (city == 8)
+		strcpy(City, "Melaka");
+	else if (city == 9)
+		strcpy(City, "Cameran Highlands");
+	else
+		strcpy(City, "Kundasang");
+	if (room == 1)
+		strcpy(ROOM1, "Standard Single Room");
+	else if (room == 2)
+		strcpy(ROOM1, "Standard Double Room");
+	else if (room == 3)
+		strcpy(ROOM1, "Premier Room");
+	else if (room == 4)
+		strcpy(ROOM1, "Standard Triple Room");
+	else if (room == 5)
+		strcpy(ROOM1, "Superior Triple Room");
+	else
+		strcpy(ROOM1, "Family Room");
+
+
+
+	cout << "\n\n\n\t\t*************************************" << endl;
+	cout << "\t\t*                                   *" << endl;
+	cout << "\t\t*         Hotel Reservation         *" << endl;
+	cout << "\t\t*                                   *" << endl;
+	cout << "\t\t*************************************" << endl << endl;
+
+	cout << "\t\tName: " << name << endl;
+	cout << "\t\tCity: " << City << endl;
+	cout << "\t\tRoom: " << ROOM1 << endl;
+	cout << "\t\tCheck In Date: " << day1 << '/' << mon1 << '/' << yr1 << endl;
+	cout << "\t\tCheck Out Date: " << day2 << '/' << mon2 << '/' << yr2 << endl;
+	cout << "\t\tNumber stay: " << numStay + 1 << " day " << numStay << " night" << endl;
+	cout << fixed << setprecision(2);
+	cout << "\t\tPrice: MYR" << total << endl << endl;
+
+	cout << "\t\t[1]Confirm" << endl;
+	cout << "\t\t[2]Back" << endl;
+	cout << "\t\t[3]Main Menu" << endl;
+	cout << "\t\tPlease enter your selection: ";
+	cin >> choice;
+
+	switch (choice)
+	{
+	case 1: {
+		system("cls");
+		loading();
+	}
+			break;
+	case 2: {
+		system("cls");
+		roomUnit();
+	}
+			break;
+	case 3: {
+		system("cls");
+		showMenu();
+	}
+			break;
+	default: {
+		system("COLOR 0A");
+		cout << "\t\tYour option only 1, 2 and 3. \n\t\t";
+		cin.clear();
+		cin.ignore(100, '\n');
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		payment();
+	}
+			 break;
+	}
+	file.close();
+}
+
+void thx()
+{
+	system("cls");
+	system("COLOR 0A");
+	cout << "\n\n\n\n\n\n\n\n";
+	cout << "\t\t _________________________________________________\n";
+	cout << "\t\t|                                                 |\n";
+	cout << "\t\t|  		Thank You   :)                    |\n";
+	cout << "\t\t|                                                 |\n";
+	cout << "\t\t|       Have a pleasant stay in Everest Hotel.    |\n";
+	cout << "\t\t|_________________________________________________|\n\n\n\t\t\t";
+}
+
+void creditcard()
+{
+	char fullname[25], creditno[20], cvv[5];
+	char choice;
+	cin.ignore();
+	cout << "\n\n\n\n\t\tKey in card name: ";									//Validate name must be alphabeth
+	cin.getline(fullname, 25);
+	while (testAlpha(fullname))
+	{
+		cout << "\t\tPlease enter alphabet only.\n";
+		cout << "\t\tRe-enter again:";
+		cin.getline(fullname, 25);
+	}
+	cout << endl;
+	cout << "\n\t\tKey in 16 digit credit card number: ";						//Validate credit card number must be digit
+	cin.getline(creditno, 20);
+	while (testDigit(creditno) || strlen(creditno) != 16)
+	{
+		cout << "\t\tInvalid card number. Please enter again: ";
+		cin.getline(creditno, 20);
+	}
+	cout << endl;
+	cout << "\n\t\tCVV/CVC: ";
+	cin.getline(cvv, 5);
+	while (testDigit(cvv) || strlen(cvv) != 3)
+	{
+		cout << "\t\tInvalid CVV/CVC. Please enter again: ";							//Validate cvv length
+		cin.getline(cvv, 5);
+	}
+
+	cout << "\n\t\tTotal Amount of Payment: MYR " << total << endl << endl;
+	cout << endl << "\t\t";
+	system("pause");
+	system("CLS");
+	book_no++;
+	cout << endl << endl << endl << "\t\tTransaction Successful...." << endl;
+	cout << "\t--------------------------------------------------" << endl;
+	cout << "\t  Thank you for choosing Everest Hotel...\n\n";
+	cout << "\t  Your Booking Number: AED" << book_no << endl << endl << endl << endl;
+	cout << "\t*Check-time starts after 12.00pm. Booking Number is needed when\n\tchecking in." << endl << endl;
+	cout << "\tDo you want to leave us some feedback? \n\t\tPress Y or press any key to return to menu..." << endl << "\t\t";
+	cin >> choice;
+	cin.ignore();
+	if (choice == 'Y' || choice == 'y')
+	{
+		system("cls");
+		feedback();
+	}
+	else
+	{
+		system("cls");
+		showMenu();
+	}
+}
+
+void feedback()
+{
+	fstream file;
+	string feedback;
+	char choice;
+
+	file.open("feedback.txt", ios::out | ios::app);		//file is opened to save user's feedbacks
+
+	cout << "\n\n\n\n\tTo our dearest customer, please leave us some precious opinion\n\tif you have any dissatisfaction.\n\t"
+		" We will look into it and improve to be better.\n\tThank you for your coorperation: " << endl << endl;
+	cout << "\tFeedback: ";
+	getline(cin, feedback);
+	cout << "\t\t";
+	file << feedback << endl << endl;
+	file << "********************************************************************************" << endl;
+	file.close();
+	system("pause");
+	system("cls");
+	showMenu();
+}
+
+void discount()
+{
+	char promo, code[20];
+	overWriteFile();		//Save room choice and prices
+	cout << "\n\n\n\t\tDo you have Everest hotel promotion code (y/n)? ";
+	cin >> promo;
+	cout << endl;
+
+	switch (promo)
+	{
+	case 'y':
+	case 'Y':
+	{
+		cin.ignore();
+		cout << "\t\tEnter promotion code (8 digits): ";
+		cin.getline(code, 20);
+		while (testDigit(code) || strlen(code) != 8)
+		{
+			cout << "\n\t\tInvalid promotion code. Please enter again: ";
+			cin.getline(code, 20);
+		}
+		cout << "\n\n\t\tYou\'ve received a discount of 5% \n\n\t\t";
+
+		total = numStay*price*0.95;
+
+		system("pause");
+		system("cls");
+		payment();
+	}
+	break;
+	case 'n':
+	case 'N':
+	{
+		total = numStay*price;
+		system("cls");
+		payment();
+	}
+	break;
+	default:
+		system("COLOR 0A");
+		cout << "\t\tYour option only \"y\" or \"n\". \n\t\t";
+		cin.clear();
+		cin.ignore(100, '\n');
+		system("pause");
+		system("cls");
+		system("COLOR 07");
+		reserve1();
+		break;
+	}
+}
+
+bool testAlpha(char n[])										//Data validation for alphabeth
+{
+	for (int i = 0; i <strlen(n); i++)
+	{
+		if (isspace(n[i]))
+		{
+			return false;
+		}
+		else if (!isalpha(n[i]))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool testDigit(char d[])										//Data validation for numbers
+{
+	for (int i = 0; i <strlen(d); i++)
+	{
+		if (isspace(d[i]))
+		{
+			return false;
+		}
+		else if (!isdigit(d[i]))
+		{
+			return true;
+		}
+	}
+	return false;
+}

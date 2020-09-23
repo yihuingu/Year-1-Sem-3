@@ -1,0 +1,68 @@
+#include<iostream>
+#include<iomanip>
+#include<cmath>
+#include<string>
+using namespace std;
+int main ()
+{
+	/* Practical 3 extra exercise
+	Q1
+
+	const double PERCENTAGE=0.2, ADULT=6.0, CHILD=3.0;
+
+	string movie;
+	double net, gross, distributor;
+	int adTicket, chTicket;
+
+	cout << "Enter the name of the movie: ";
+	getline(cin,movie);
+
+	cout << "Enter the number of adult ticket sold: ";
+	cin >> adTicket;
+	cout << "Enter the number of child ticket sold: ";
+	cin >> chTicket;
+
+	gross = (adTicket*ADULT) + (chTicket*CHILD);
+	net = PERCENTAGE * gross;
+	distributor = gross - net;
+
+	cout << "Revenue Report" << endl << "===============" << endl;
+	cout << "Movie Name:              "<<"\"" << movie << "\"" << endl;
+	cout << "Adult Tickets Sold:     " << setw(8) << adTicket << endl;
+	cout << "Child Tickets Sold:     " << setw(8) << chTicket << endl;
+
+	cout << fixed << setprecision(2);
+	cout << "Gross Box Office Profit:     $" << setw(8) << gross << endl;
+	cout << "Net Box Office Profit:       $" << setw(8) << net << endl;
+	cout << "Amount Paid to Distributor:  $" << setw(8) << distributor << endl;*/
+
+	/* Q2
+	
+	const double YEN_PER_DOLLAR=123.65;
+	const double EUROS_PER_DOLLAR=0.90;
+	double dollars, euros,yen;
+
+	cout << "Please insert your amount in US Dollar: ";
+	cin >> dollars;
+
+	yen = dollars * YEN_PER_DOLLAR;
+	euros = dollars * EUROS_PER_DOLLAR;
+
+	cout << fixed << setprecision(2);
+	cout << "The amount in yen is " << yen << endl;
+	cout << "The amount in euros is " << euros << endl;*/
+
+	/* Q3
+	
+	double angle;
+
+	cout << "Enter the angle in radians: ";
+	cin >> angle;
+	cout << fixed << setprecision(2);;
+	cout << "The sine is: " << sin(angle) << endl;
+	cout << "The cosine is: " << cos(angle) << endl;
+	cout << "The tangent is: " << tan(angle) << endl;*/
+
+	system("pause");
+	return 0;
+}
